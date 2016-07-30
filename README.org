@@ -1,1 +1,3 @@
-#+TITLE: Marker — A file format and tool suite for marking student work
+#+TITLE: Mark — A file format for marking student work
+
+
