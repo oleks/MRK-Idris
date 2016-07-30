@@ -1,3 +1,9 @@
 #+TITLE: MRK — A file format for marking student work
 
-
+When judging student performance, it is useful to have both smaller, composable
+quantitive judgements, and some qualitative remarks on key areas of interest.
+This makes both spreadsheets and mere text-files ill-suited for marking student
+work.  Although org-mode can solve this problem to a great extent, it becomes a
+heavy tool in the light of having to mark hundreds of students in a distributed
+fashion. With org-mode, everything is in one file, while global, intra-student
+statistics are not needed until all the students have been fully marked.
