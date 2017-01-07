@@ -16,5 +16,5 @@ statistics are not needed until all the students have been fully marked.
   4. Synchronization options with Dropbox and/or Google Drive.
 
 Goal 4 is not necessarily related to MRK, but is related to marking student
-work with external examiners, who are not always obliging to using explicit
+work with external examiners, who are not always willing to use more explicit
 version-control systems, such as git.
