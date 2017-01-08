@@ -73,6 +73,20 @@ eof = do
     _   => reject
 
 export
+nonempty : Parser (List a) -> Parser (List a)
+nonempty p = do
+  as <- p
+  case as of
+    [] => reject
+    _ => pure as
+
+export
+satisfy : (Char -> Bool) -> Parser Char
+satisfy p = do
+  c <- getc
+  if p c then pure c else reject
+
+export
 parse : Parser a -> String -> (List (a, String))
 parse (P p) s =
   let rs = p (unpack s)
