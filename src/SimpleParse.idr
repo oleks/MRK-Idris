@@ -17,7 +17,7 @@ Functor Parser where
 
 Applicative Parser where
   pure = pure'
-  pf <*> px = bind' pf (\f => bind' px (pure' . f))
+  pf <*> px = bind' pf (\f => bind' px (pure . f))
 
 Monad Parser where
   (>>=) = bind'
