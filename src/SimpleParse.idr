@@ -124,3 +124,66 @@ export
 between : Parser open -> Parser close
            -> Parser a -> Parser a
 between open close p = (void $ open) *> p <* (void $ close)
+
+export
+chainl1 : Parser a -> Parser (a -> a -> a) -> Parser a
+chainl1 p op = p >>= chainl1'
+  where
+    chainl1' x = pure x <|> do
+      f <- op
+      y <- p
+      chainl1' (f x y)
+
+export
+chainr1 : Parser a -> Parser (a -> a -> a) -> Parser a
+chainr1 p op = p >>= chainr1'
+  where
+    chainr1' x = pure x <|> do
+      f <- op
+      y <- chainr1 p op
+      pure (f x y)
+
+mutual
+  export
+  sepBy : Parser a -> Parser sep -> Parser (List a)
+  sepBy p sep = (p `sepBy1` sep) <|> pure []
+
+  export
+  sepBy1 : Parser a -> Parser sep -> Parser (List a)
+  sepBy1 p sep = do {a <- p; as <- many (sep *> p); pure (a::as)}
+
+export
+munch : (Char -> Bool) -> Parser String
+munch p = do
+    cs <- get
+    map pack (scan cs)
+  where
+    scan : (List Char) -> Parser (List Char)
+    scan (c::cs) =
+      if (p c)
+      then do
+        _ <- getc
+        cs' <- scan cs
+        pure (c::cs')
+      else pure []
+    scan _ = pure []
+
+export
+munch1 : (Char -> Bool) -> Parser String
+munch1 p = do
+  cs <- munch p
+  case cs of
+    "" => reject
+    _ => pure cs
+
+export
+spaces : Parser String
+spaces = munch isSpace
+
+export
+token : Parser a -> Parser a
+token p = spaces *> p
+
+export
+stoken : String -> Parser ()
+stoken = void . token . string
