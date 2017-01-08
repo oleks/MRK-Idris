@@ -79,3 +79,7 @@ parse (P p) s =
       as = map fst rs
       ss = map pack (map snd rs)
   in zip as ss
+
+export
+fullParse : Parser a -> String -> List a
+fullParse p s = map fst $ parse (p <* eof) s
