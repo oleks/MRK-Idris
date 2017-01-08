@@ -38,6 +38,16 @@ char c = do
   if c == c' then pure c else reject
 
 export
+string : String -> Parser String
+string s = map pack (string' (unpack s))
+  where string' : (List Char) -> Parser (List Char)
+        string' [] = pure []
+        string' (c::cs) = do
+          char c
+          string' cs
+          pure (c::cs)
+
+export
 parse : Parser a -> String -> (List (a, String))
 parse (P p) s =
   let rs = p (unpack s)
