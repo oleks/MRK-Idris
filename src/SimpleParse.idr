@@ -97,3 +97,21 @@ parse (P p) s =
 export
 fullParse : Parser a -> String -> List a
 fullParse p s = map fst $ parse (p <* eof) s
+
+Alternative Parser where
+  empty = reject
+  (P p) <|> (P q) = P $ \cs => p cs <|> q cs
+
+export
+option : a -> Parser a -> Parser a
+option v p = p <|> pure v
+
+export
+choice : List (Parser a) -> Parser a
+choice [] = reject
+choice (p::ps) = p <|> choice ps
+
+export
+between : Parser open -> Parser close
+           -> Parser a -> Parser a
+between open close p = (void $ open) *> p <* (void $ close)
