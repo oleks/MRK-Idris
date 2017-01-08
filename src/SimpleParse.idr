@@ -1,3 +1,6 @@
+||| Roughly, but distantly based on
+||| https://github.com/kfl/simpleparse/blob/master/SimpleParse.hs 
+
 module SimpleParse
 
 export
