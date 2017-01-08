@@ -102,6 +102,15 @@ Alternative Parser where
   empty = reject
   (P p) <|> (P q) = P $ \cs => p cs <|> q cs
 
+mutual
+  export
+  some : Alternative f => f a -> f (List a)
+  some p = (map (::) p) <*> many p
+
+  export
+  many : Alternative f => f a -> f (List a)
+  many p = some p <|> pure []
+
 export
 option : a -> Parser a -> Parser a
 option v p = p <|> pure v
