@@ -1,4 +1,4 @@
-||| Roughly, but distantly based on
+||| Roughly based on
 ||| https://github.com/kfl/simpleparse/blob/master/SimpleParse.hs 
 
 module SimpleParse
