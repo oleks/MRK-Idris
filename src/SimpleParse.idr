@@ -12,6 +12,9 @@ bind' (P ma) f = P ( \ s => do
 pure' : a -> Parser a
 pure' a = P (\s => [(a, s)])
 
+void : Monad m => m a -> m ()
+void m = m >>= (\_ => pure ())
+
 Functor Parser where
   map f m = bind' m (\a => pure' (f a))
 
@@ -22,11 +25,15 @@ Applicative Parser where
 Monad Parser where
   (>>=) = bind'
 
+get : Parser (List Char)
+get = P (\ cs => [(cs, cs)])
+
 getc : Parser Char
 getc = P getc'
   where getc' : List Char -> (List (Char, List Char))
         getc' [] = []
         getc' (x::xs) = [(x, xs)]
+
 export
 reject : Parser a
 reject = P (\ _ => [])
@@ -46,6 +53,24 @@ string s = map pack (string' (unpack s))
           char c
           string' cs
           pure (c::cs)
+
+export
+chars : List Char -> Parser Char
+chars cs = do
+  c <- getc
+  if c `elem` cs then pure c else reject
+
+export
+wild : Parser ()
+wild = void getc
+
+export
+eof : Parser ()
+eof = do
+  cs <- get
+  case cs of
+    []  => pure ()
+    _   => reject
 
 export
 parse : Parser a -> String -> (List (a, String))
