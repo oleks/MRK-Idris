@@ -18,13 +18,16 @@ pure' a = P (\s => [(a, s)])
 void : Monad m => m a -> m ()
 void m = m >>= (\_ => pure ())
 
+export
 Functor Parser where
   map f m = bind' m (\a => pure' (f a))
 
+export
 Applicative Parser where
   pure = pure'
   pf <*> px = bind' pf (\f => bind' px (pure . f))
 
+export
 Monad Parser where
   (>>=) = bind'
 
