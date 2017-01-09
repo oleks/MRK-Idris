@@ -104,6 +104,7 @@ export
 fullParse : Parser a -> String -> List a
 fullParse p s = map fst $ parse (p <* eof) s
 
+export
 Alternative Parser where
   empty = reject
   (P p) <|> (P q) = P $ \cs => p cs <|> q cs
